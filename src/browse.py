@@ -1,7 +1,6 @@
 import os
 from math import ceil
 import subprocess
-import json
 
 from rich.markdown import Markdown
 from rich.console import Console, ConsoleOptions, RenderResult, RenderableType
@@ -18,11 +17,10 @@ from textual.reactive import Reactive
 from textual.widget import Widget
 
 from table import TableWidget
-
-with open('config.json', 'r') as configfile:
-    config = json.loads(configfile.read())
+from utils.config import get_config
 
 console = Console()
+config = get_config()
 
 class FileRenderable:
     def __init__(self, label: RenderableType, style: StyleType = "") -> None:
@@ -81,26 +79,21 @@ class MyApp(App):
         await self.bind("escape", "quit", "Quit")
         await self.bind("u", "back()", "Go back")
 
+    async def on_mount(self, event: events.Mount) -> None:
+        """Create and dock the widgets."""
+        await self.view.dock(Footer(), edge="bottom")
+        await self.load_buttons()
+
     async def action_back(self):
         parent_dir = os.path.abspath(os.path.join(self.dir, os.pardir))
         await self.change_dir(parent_dir)
-
-    async def on_mount(self, event: events.Mount) -> None:
-        """Create and dock the widgets."""
-
-        # Header / footer / dock
-        await self.view.dock(Footer(), edge="bottom")
-
-        await self.load_buttons()
 
     async def load_buttons(self) -> None:
         self.btns_list = []
         self.open_dir = os.listdir(self.dir)
         for i in range(len(self.open_dir)):
-            s = "white on grey0"
-            if i == self.selected:
-                s = "white"
             file = self.open_dir[i]
+            s = "white on grey0" if i != self.selected else "white"
             self.btns_list.append(File(label=file, style=s))
         await self.clear_buttons()
         self.btns = (btn for btn in self.btns_list)
@@ -147,7 +140,6 @@ class MyApp(App):
             await self.decrement()
         elif event.key == "enter":
             await self.handle_click(self.open_dir[self.selected])
-        pass
 
 
 MyApp.run(title="Anime TUI", log="textual.log")
