@@ -3,7 +3,10 @@ import subprocess
 import json
 
 from rich.markdown import Markdown
+from rich.console import Console, ConsoleOptions, RenderResult, RenderableType
 from rich.panel import Panel
+from rich.style import StyleType
+from rich.align import Align
 
 from textual import events
 from textual.app import App, DockLayout
@@ -13,12 +16,43 @@ from textual.widget import Widget
 
 with open('config.json', 'r') as configfile:
     config = json.loads(configfile.read())
+
+class FileRenderable:
+    def __init__(self, label: RenderableType, style: StyleType = "") -> None:
+        self.label = label
+        self.style = style
+
+    def __rich_console__(
+        self, console: Console, options: ConsoleOptions
+    ) -> RenderResult:
+        width = options.max_width
+        height = options.max_height or 1
+
+        yield Align.center(
+            self.label, vertical="middle", style=self.style, width=width, height=height
+        )
     
 class File(Widget):
-    mouse_over = Reactive(False)
+    def __init__(
+        self,
+        label: RenderableType,
+        name: str | None = None,
+        style: StyleType = "white on dark_blue",
+    ):
+        super().__init__(name=name)
+        self.name = name or str(label)
+        self.button_style = style
+
+        self.label = label
+
+    label: Reactive[RenderableType] = Reactive("")
 
     def render(self) -> Panel:
-        return Panel("Hello [b]World[/b]", style=("on red" if self.mouse_over else ""))
+        return FileRenderable(self.label, style=self.button_style)
+
+    async def on_click(self, event: events.Click) -> None:
+        event.prevent_default().stop()
+        await self.emit(ButtonPressed(self))
 
     def on_enter(self) -> None:
         self.mouse_over = True
@@ -31,6 +65,8 @@ class MyApp(App):
     filetypes = ['.mp4', '.mkv']
     dir = config['anime_dir']
     script_path = config['script_path']
+    selected = 0
+    btns_list = []
 
     async def on_load(self, event: events.Load) -> None:
         """Bind keys with the app loads (but before entering application mode)"""
@@ -48,7 +84,18 @@ class MyApp(App):
         # Header / footer / dock
         await self.view.dock(Footer(), edge="bottom")
 
-        self.btns = (Button(label=file, style="white on grey0") for file in os.listdir(self.dir))
+        await self.load_buttons()
+
+    async def load_buttons(self) -> None:
+        self.btns_list = []
+        for i in range(len(os.listdir(self.dir))):
+            s = "white on grey0"
+            if i == self.selected:
+                s = "red"
+            file = os.listdir(self.dir)[i]
+            self.btns_list.append(File(label=file, style=s))
+        await self.clear_buttons()
+        self.btns = (btn for btn in self.btns_list)
         await self.view.dock(*self.btns, edge="top")
 
     async def clear_buttons(self) -> None:
@@ -58,22 +105,40 @@ class MyApp(App):
 
     async def change_dir(self, new_dir) -> None:
         self.dir = new_dir
-        await self.clear_buttons()
-        self.btns = (Button(label=file, style="white on grey0") for file in os.listdir(self.dir))
-        await self.view.dock(*self.btns, edge="top")
+        await self.load_buttons()
 
     def open_anime(self, file) -> None:
         os.startfile(file)
         os.startfile(self.script_path)
 
-    async def handle_button_pressed(self, message: ButtonPressed) -> None:
-        child = f'{self.dir}/{message.sender.name}'
-        if any(ext in message.sender.name for ext in self.filetypes):
+    async def handle_click(self, file) -> None:
+        child = f'{self.dir}/{file}'
+        if any(ext in file for ext in self.filetypes):
             self.open_anime(child)
             return
         await self.change_dir(child)
 
+
+    async def handle_button_pressed(self, message: ButtonPressed) -> None:
+        await self.handle_click(message.sender.name)
+
+    async def increment(self):
+        if self.selected + 1 < len(os.listdir(self.dir)):
+            self.selected += 1
+        await self.load_buttons()
+
+    async def decrement(self):
+        if self.selected - 1 >= 0:
+            self.selected -= 1
+        await self.load_buttons()
+
     async def on_key(self, event) -> None:
+        if event.key == "down":
+            await self.increment()
+        elif event.key == "up":
+            await self.decrement()
+        elif event.key == "enter":
+            await self.handle_click(os.listdir(self.dir)[self.selected])
         pass
 
 
