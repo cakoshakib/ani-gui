@@ -1,4 +1,7 @@
 import os
+import subprocess
+import json
+
 from rich.markdown import Markdown
 from rich.panel import Panel
 
@@ -8,6 +11,9 @@ from textual.widgets import Header, Footer, Placeholder, ScrollView, Button, But
 from textual.reactive import Reactive
 from textual.widget import Widget
 
+with open('config.json', 'r') as configfile:
+    config = json.loads(configfile.read())
+    
 class File(Widget):
     mouse_over = Reactive(False)
 
@@ -23,10 +29,11 @@ class File(Widget):
 
 class MyApp(App):
     filetypes = ['.mp4', '.mkv']
+    dir = config['anime_dir']
+    script_path = config['script_path']
 
     async def on_load(self, event: events.Load) -> None:
         """Bind keys with the app loads (but before entering application mode)"""
-        await self.bind("b", "view.toggle('sidebar')", "Toggle sidebar")
         await self.bind("q", "quit", "Quit")
         await self.bind("escape", "quit", "Quit")
         await self.bind("u", "back()", "Go back")
@@ -41,7 +48,6 @@ class MyApp(App):
         # Header / footer / dock
         await self.view.dock(Footer(), edge="bottom")
 
-        self.dir = "C:/Anime"
         self.btns = (Button(label=file, style="white on grey0") for file in os.listdir(self.dir))
         await self.view.dock(*self.btns, edge="top")
 
@@ -50,19 +56,25 @@ class MyApp(App):
         self.view.widgets.clear()
         await self.view.dock(Footer(), edge="bottom")
 
-
     async def change_dir(self, new_dir) -> None:
         self.dir = new_dir
         await self.clear_buttons()
         self.btns = (Button(label=file, style="white on grey0") for file in os.listdir(self.dir))
         await self.view.dock(*self.btns, edge="top")
 
+    def open_anime(self, file) -> None:
+        os.startfile(file)
+        os.startfile(self.script_path)
+
     async def handle_button_pressed(self, message: ButtonPressed) -> None:
         child = f'{self.dir}/{message.sender.name}'
         if any(ext in message.sender.name for ext in self.filetypes):
-            os.startfile(child)
+            self.open_anime(child)
             return
         await self.change_dir(child)
+
+    async def on_key(self, event) -> None:
+        pass
 
 
 MyApp.run(title="Anime TUI", log="textual.log")
