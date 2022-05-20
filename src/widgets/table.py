@@ -20,7 +20,6 @@ class TableWidget(Widget):
         self.clock = clock
         self.rows = rows
         self.selected = selected
-        print(self.selected)
         self.offset = max(self.selected - 44, 0)
 
     def render(self) -> Panel:
