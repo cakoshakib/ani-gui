@@ -20,11 +20,13 @@ class TableWidget(Widget):
         self.clock = clock
         self.rows = rows
         self.selected = selected
+        print(self.selected)
+        self.offset = max(self.selected - 44, 0)
 
     def render(self) -> Panel:
         table = Table.grid(padding=(0, 1), expand=True)
         table.add_column("title", justify="center", ratio=1)
-        for i in range(len(self.rows)):
+        for i in range(self.offset, len(self.rows)):
             row = self.rows[i]
             if i == self.selected:
                 table.add_row(Align.center(row, vertical="middle"), style="green")
