@@ -17,7 +17,7 @@ from textual.reactive import Reactive
 from textual.widget import Widget
 
 from table import TableWidget
-from utils.config import get_config
+from utils import get_config
 
 console = Console()
 config = get_config()
