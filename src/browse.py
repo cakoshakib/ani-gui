@@ -13,7 +13,6 @@ from rich.console import Console
 from textual import events
 from textual.app import App, DockLayout
 from textual.widgets import (
-    Header,
     Footer,
     Placeholder,
     ScrollView,
@@ -23,8 +22,7 @@ from textual.widgets import (
 from textual.reactive import Reactive
 from textual.widget import Widget
 
-from table import TableWidget
-from file import File
+from widgets import File, TableWidget
 from utils import get_config
 
 console = Console()

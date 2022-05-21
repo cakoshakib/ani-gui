@@ -20,7 +20,7 @@ class Parser:
             return re.sub(r"\_", " ", title)
         return title
 
-    def simple_parse(self, title: str) -> str:
+    def dir_parse(self, title: str) -> str:
         parsed_title = title.strip()
 
         if "&#39;" in parsed_title:
@@ -34,4 +34,4 @@ class Parser:
         return parsed_title.strip()
 
     def parse(self, title: str) -> str:
-        return self.simple_parse(title)
+        return self.dir_parse(title)

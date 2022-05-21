@@ -33,7 +33,7 @@ class TableWidget(Widget):
         table = self.add_rows(table)
         return table
 
-    def parse_row(self, name) -> None:
+    def parse_row(self, name):
         parser = Parser()
         return parser.parse(name)
 
