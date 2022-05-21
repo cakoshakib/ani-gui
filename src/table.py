@@ -1,11 +1,12 @@
 import os
+from utils import Parser
+
 from rich.align import Align
 from rich.console import RenderableType
 from rich.panel import Panel
 from rich.style import StyleType
 from rich.table import Table
 from textual.widget import Widget
-
 
 class TableWidget(Widget):
     def __init__(
@@ -31,9 +32,14 @@ class TableWidget(Widget):
         table = self.add_rows(table)
         return table
 
+    def parse_row(self, name) -> None:
+        parser = Parser()
+        return parser.parse(name)
+        
+
     def add_rows(self, table) -> RenderableType:
         for i in range(self.offset, len(self.rows)):
-            row = self.rows[i].name
+            row = self.parse_row(self.rows[i].name)
             if i == self.selected:
                 if self.rows[i].is_file():
                     table.add_row(Align(row, vertical="middle"), style="green")

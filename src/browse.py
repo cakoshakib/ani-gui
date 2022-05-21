@@ -23,13 +23,12 @@ from textual.widgets import (
 from textual.reactive import Reactive
 from textual.widget import Widget
 
-from widgets.table import TableWidget
-from widgets.file import File
+from table import TableWidget
+from file import File
 from utils import get_config
 
 console = Console()
 config = get_config()
-
 
 class MyApp(App):
     filetypes = [".mp4", ".mkv"]
