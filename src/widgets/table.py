@@ -25,7 +25,7 @@ class TableWidget(Widget):
         self.clock = clock
         self.rows = rows
         self.selected = selected
-        self.offset = max(self.selected - 22, 0)
+        self.offset = max(self.selected - 21, 0)
 
     def render(self) -> Panel:
         table = Table.grid(padding=(1, 1), expand=True)

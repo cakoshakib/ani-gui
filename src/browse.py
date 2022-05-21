@@ -22,7 +22,7 @@ from textual.widgets import (
 from textual.reactive import Reactive
 from textual.widget import Widget
 
-from widgets import File, TableWidget
+from widgets import File, TableWidget, Header
 from utils import get_config
 
 console = Console()
@@ -73,6 +73,7 @@ class MyApp(App):
     async def clear_buttons(self) -> None:
         self.view.layout.docks.clear()
         self.view.widgets.clear()
+        await self.view.dock(Header("Anime TUI"), edge="top")
         await self.view.dock(Placeholder(), edge="right", size=40)
         await self.view.dock(Footer(), edge="bottom")
 
