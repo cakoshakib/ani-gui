@@ -94,9 +94,9 @@ class MyApp(App):
         await self.load_buttons()
 
     async def on_key(self, event) -> None:
-        if event.key == "down":
+        if event.key == "down" or event.key == "j":
             await self.increment()
-        elif event.key == "up":
+        elif event.key == "up" or event.key == "k":
             await self.decrement()
         elif event.key == "enter":
             await self.handle_click(self.open_dir[self.selected])

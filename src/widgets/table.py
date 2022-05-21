@@ -1,4 +1,5 @@
 from rich.align import Align
+from rich.console import RenderableType
 from rich.panel import Panel
 from rich.style import StyleType
 from rich.table import Table
@@ -25,6 +26,10 @@ class TableWidget(Widget):
     def render(self) -> Panel:
         table = Table.grid(padding=(1, 1), expand=True)
         table.add_column("title", justify="left", ratio=1)
+        table = self.add_rows(table)
+        return table
+
+    def add_rows(self, table) -> RenderableType:
         for i in range(self.offset, len(self.rows)):
             row = self.rows[i]
             if i == self.selected:
