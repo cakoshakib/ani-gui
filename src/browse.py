@@ -30,6 +30,7 @@ from utils import get_config
 console = Console()
 config = get_config()
 
+
 class MyApp(App):
     filetypes = [".mp4", ".mkv"]
     dir = config["anime_dir"]
