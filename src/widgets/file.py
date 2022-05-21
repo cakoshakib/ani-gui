@@ -8,6 +8,7 @@ from textual.widget import Widget
 from textual.reactive import Reactive
 from textual import events
 
+
 class FileRenderable:
     def __init__(self, label: RenderableType, style: StyleType = "") -> None:
         self.label = label
@@ -22,6 +23,7 @@ class FileRenderable:
         yield Align.center(
             self.label, vertical="middle", style=self.style, width=width, height=height
         )
+
 
 class File(Widget):
     def __init__(

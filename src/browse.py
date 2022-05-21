@@ -12,7 +12,14 @@ from rich.console import Console
 
 from textual import events
 from textual.app import App, DockLayout
-from textual.widgets import Header, Footer, Placeholder, ScrollView, Button, ButtonPressed
+from textual.widgets import (
+    Header,
+    Footer,
+    Placeholder,
+    ScrollView,
+    Button,
+    ButtonPressed,
+)
 from textual.reactive import Reactive
 from textual.widget import Widget
 
@@ -23,12 +30,12 @@ from utils import get_config
 console = Console()
 config = get_config()
 
+
 class MyApp(App):
-    filetypes = ['.mp4', '.mkv']
-    dir = config['anime_dir']
-    script_path = config['script_path']
+    filetypes = [".mp4", ".mkv"]
+    dir = config["anime_dir"]
+    script_path = config["script_path"]
     selected = 0
-    btns_list = []
     open_dir = []
 
     async def on_load(self, event: events.Load) -> None:
@@ -47,16 +54,23 @@ class MyApp(App):
         parent_dir = os.path.abspath(os.path.join(self.dir, os.pardir))
         await self.change_dir(parent_dir)
 
+    def read_dir(self) -> [os.DirEntry]:
+        open_dir = []
+        with os.scandir(self.dir) as it:
+            for entry in it:
+                if (
+                    entry.is_file() and any(ext in entry.name for ext in self.filetypes)
+                ) or entry.is_dir():
+                    open_dir.append(entry)
+        return open_dir
+
     async def load_buttons(self) -> None:
-        self.btns_list = []
-        self.open_dir = os.listdir(self.dir)
-        for i in range(len(self.open_dir)):
-            file = self.open_dir[i]
-            s = "white on grey0" if i != self.selected else "white"
-            self.btns_list.append(File(label=file, style=s))
+        self.open_dir = self.read_dir()
         await self.clear_buttons()
-        self.btns = (btn for btn in self.btns_list)
-        await self.view.dock(TableWidget(rows=self.open_dir, style="white", selected=self.selected), edge="left")
+        await self.view.dock(
+            TableWidget(rows=self.open_dir, style="white", selected=self.selected),
+            edge="left",
+        )
 
     async def clear_buttons(self) -> None:
         self.view.layout.docks.clear()
@@ -74,7 +88,8 @@ class MyApp(App):
         os.startfile(self.script_path)
 
     async def handle_click(self, file) -> None:
-        child = f'{self.dir}/{file}'
+        print(file)
+        child = f"{self.dir}/{file}"
         if any(ext in file for ext in self.filetypes):
             self.open_anime(child)
             return
@@ -84,7 +99,7 @@ class MyApp(App):
         await self.handle_click(message.sender.name)
 
     async def increment(self):
-        if self.selected + 1 < len(self.btns_list):
+        if self.selected + 1 < len(self.open_dir):
             self.selected += 1
         await self.load_buttons()
 
@@ -99,7 +114,7 @@ class MyApp(App):
         elif event.key == "up" or event.key == "k":
             await self.decrement()
         elif event.key == "enter":
-            await self.handle_click(self.open_dir[self.selected])
+            await self.handle_click(self.open_dir[self.selected].name)
 
 
 MyApp.run(title="Anime TUI", log="textual.log")

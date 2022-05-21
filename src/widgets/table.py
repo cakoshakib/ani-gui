@@ -1,9 +1,11 @@
+import os
 from rich.align import Align
 from rich.console import RenderableType
 from rich.panel import Panel
 from rich.style import StyleType
 from rich.table import Table
 from textual.widget import Widget
+
 
 class TableWidget(Widget):
     def __init__(
@@ -12,7 +14,7 @@ class TableWidget(Widget):
         tall: bool = True,
         style: StyleType = "white on dark_green",
         clock: bool = True,
-        rows: [str],
+        rows: [os.DirEntry],
         selected: int
     ) -> None:
         super().__init__()
@@ -31,9 +33,9 @@ class TableWidget(Widget):
 
     def add_rows(self, table) -> RenderableType:
         for i in range(self.offset, len(self.rows)):
-            row = self.rows[i]
+            row = self.rows[i].name
             if i == self.selected:
                 table.add_row(Align(row, vertical="middle"), style="green")
             else:
                 table.add_row(Align(row, vertical="middle"), style="white")
-        return table 
+        return table
