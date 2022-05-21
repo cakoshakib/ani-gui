@@ -35,7 +35,13 @@ class TableWidget(Widget):
         for i in range(self.offset, len(self.rows)):
             row = self.rows[i].name
             if i == self.selected:
-                table.add_row(Align(row, vertical="middle"), style="green")
+                if self.rows[i].is_file():
+                    table.add_row(Align(row, vertical="middle"), style="green")
+                elif self.rows[i].is_dir():
+                    table.add_row(Align(row, vertical="middle"), style="light_slate_blue")
             else:
-                table.add_row(Align(row, vertical="middle"), style="white")
+                if self.rows[i].is_file():
+                    table.add_row(Align(row, vertical="middle"), style="white")
+                elif self.rows[i].is_dir():
+                    table.add_row(Align(row, vertical="middle"), style="light_sky_blue1")
         return table
