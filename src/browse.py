@@ -40,6 +40,7 @@ class MyApp(App):
     async def on_mount(self, event: events.Mount) -> None:
         """Create and dock the widgets."""
         await self.view.dock(Footer(), edge="bottom")
+        await self.view.dock(Placeholder(), edge="right")
         await self.load_buttons()
 
     async def action_back(self):
@@ -55,11 +56,12 @@ class MyApp(App):
             self.btns_list.append(File(label=file, style=s))
         await self.clear_buttons()
         self.btns = (btn for btn in self.btns_list)
-        await self.view.dock(TableWidget(rows=self.open_dir, style="white", selected=self.selected), edge="top")
+        await self.view.dock(TableWidget(rows=self.open_dir, style="white", selected=self.selected), edge="left")
 
     async def clear_buttons(self) -> None:
         self.view.layout.docks.clear()
         self.view.widgets.clear()
+        await self.view.dock(Placeholder(), edge="right", size=40)
         await self.view.dock(Footer(), edge="bottom")
 
     async def change_dir(self, new_dir) -> None:
