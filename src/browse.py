@@ -22,7 +22,7 @@ from textual.widgets import (
 from textual.reactive import Reactive
 from textual.widget import Widget
 
-from widgets import File, TableWidget, Header
+from widgets import File, TableWidget, Header, Progress
 from utils import get_config
 
 console = Console()
@@ -44,8 +44,6 @@ class MyApp(App):
 
     async def on_mount(self, event: events.Mount) -> None:
         """Create and dock the widgets."""
-        await self.view.dock(Footer(), edge="bottom")
-        await self.view.dock(Placeholder(), edge="right")
         await self.load_buttons()
 
     async def action_back(self):
@@ -74,7 +72,7 @@ class MyApp(App):
         self.view.layout.docks.clear()
         self.view.widgets.clear()
         await self.view.dock(Header("Anime TUI"), edge="top")
-        await self.view.dock(Placeholder(), edge="right", size=40)
+        await self.view.dock(Progress(username='1mp'), edge="right", size=40)
         await self.view.dock(Footer(), edge="bottom")
 
     async def change_dir(self, new_dir) -> None:
