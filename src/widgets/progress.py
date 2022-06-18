@@ -56,7 +56,7 @@ class Progress(Widget):
         table = Table.grid(padding=(1, 2), expand=True)
         table.style = self.style
         table.add_column("Title")
-        table.add_column("Episode", justify="right", ratio=1)
+        table.add_column("Episode", justify="right", ratio=1, style="red")
         for anime in data:
             title = anime['media']['title']['english']
             episode = anime['progress']
@@ -69,7 +69,7 @@ class Progress(Widget):
         return Panel(
             table,
             title='Watch List',
-            border_style="green",
+            border_style="blue",
             style=self.style,
             height=self.height,
         )
