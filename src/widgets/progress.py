@@ -1,7 +1,5 @@
 from rich import box
 from rich.align import Align
-import requests
-import json
 
 from rich.console import RenderableType
 from rich.panel import Panel
