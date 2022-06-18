@@ -23,7 +23,7 @@ from textual.reactive import Reactive
 from textual.widget import Widget
 
 from widgets import File, TableWidget, Header, Progress
-from utils import get_config
+from utils import get_config, query_watch_list
 
 console = Console()
 config = get_config()
@@ -41,6 +41,7 @@ class MyApp(App):
         await self.bind("q", "quit", "Quit")
         await self.bind("escape", "quit", "Quit")
         await self.bind("u", "back()", "Go back")
+        self.watch_list = query_watch_list(config['anilist_username'])
 
     async def on_mount(self, event: events.Mount) -> None:
         """Create and dock the widgets."""
@@ -72,7 +73,7 @@ class MyApp(App):
         self.view.layout.docks.clear()
         self.view.widgets.clear()
         await self.view.dock(Header("Anime TUI"), edge="top")
-        await self.view.dock(Progress(username='1mp'), edge="right", size=40)
+        await self.view.dock(Progress(watch_list=self.watch_list), edge="right", size=40)
         await self.view.dock(Footer(), edge="bottom")
 
     async def change_dir(self, new_dir) -> None:
