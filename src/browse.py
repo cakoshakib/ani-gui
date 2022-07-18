@@ -1,6 +1,7 @@
 import os
 from math import ceil
 import subprocess
+import sys
 
 from rich.markdown import Markdown
 from rich.console import Console, ConsoleOptions, RenderResult, RenderableType
@@ -82,8 +83,15 @@ class MyApp(App):
         await self.load_buttons()
 
     def open_anime(self, file) -> None:
-        os.startfile(file)
-        os.startfile(self.script_path)
+        if sys.platform == 'win32':
+            os.startfile(file)
+            if self.script_path:
+                os.startfile(self.script_path)
+        else:
+            subprocess.call(["vlc", file])
+            if self.script_path:
+                subprocess.call([self.script_path])
+
 
     async def handle_click(self, file) -> None:
         print(file)
