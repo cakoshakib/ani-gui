@@ -3,7 +3,7 @@ from rich.console import Console
 console = Console()
 
 def entry_height(entry, table_width):
-    padding = 2
+    padding = 1
     line = (len(entry) // table_width) + 1
     return line + padding
 
@@ -17,7 +17,7 @@ def validate_selected(entries, selected):
     """ Returns True if selected is within table view """
     table_height, table_width = table_size()
     # Calculate how many lines each "entry" takes
-    total_height = 0
+    total_height = 2
     for i in range(len(entries)):
         total_height += entry_height(entries[i], table_height)
         if total_height > table_height:
