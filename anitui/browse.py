@@ -9,7 +9,6 @@ from rich.panel import Panel
 from rich.style import StyleType
 from rich.align import Align
 from rich.table import Table
-from rich.console import Console
 
 from textual import events
 from textual.app import App, DockLayout
@@ -23,14 +22,14 @@ from textual.widgets import (
 from textual.reactive import Reactive
 from textual.widget import Widget
 
-from widgets import File, TableWidget, Header, Progress
-from utils import get_config, query_watch_list
+from .widgets import File, TableWidget, Header, Progress
+from .utils import get_config, query_watch_list
 
 console = Console()
 config = get_config()
 
 
-class MyApp(App):
+class AniTUI(App):
     filetypes = [".mp4", ".mkv"]
     dir = config["anime_dir"]
     script_path = config["script_path"]
@@ -42,7 +41,7 @@ class MyApp(App):
         await self.bind("q", "quit", "Quit")
         await self.bind("escape", "quit", "Quit")
         await self.bind("u", "back()", "Go back")
-        self.watch_list = query_watch_list(config['anilist_username'])
+        self.watch_list = query_watch_list(config['anilist_username']) if config['anilist_username'] else []
 
     async def on_mount(self, event: events.Mount) -> None:
         """Create and dock the widgets."""
@@ -124,4 +123,4 @@ class MyApp(App):
             await self.handle_click(self.open_dir[self.selected].name)
 
 
-MyApp.run(title="Anime TUI", log="textual.log")
+#AniTUI.run(title="Anime TUI", log="textual.log")

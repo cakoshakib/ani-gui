@@ -1,5 +1,5 @@
 import os
-from utils import Parser
+from ..utils import Parser
 
 from rich.align import Align
 from rich.console import RenderableType, Console
