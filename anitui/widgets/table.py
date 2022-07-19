@@ -1,5 +1,5 @@
 import os
-from ..utils import Parser
+from ..utils import Parser, validate_selected
 
 from rich.align import Align
 from rich.console import RenderableType, Console
@@ -17,16 +17,20 @@ class TableWidget(Widget):
         style: StyleType = "white on dark_green",
         clock: bool = True,
         rows: [os.DirEntry],
-        selected: int
+        selected: int,
+        offset: int = 0,
     ) -> None:
         super().__init__()
         self.tall = tall
         self.style = style
         self.clock = clock
         self.rows = rows
+        self.file_names = list(
+            map(lambda row: self.parse_row(row.name), rows)
+        )
         self.selected = selected
-        self.max_lines = Console().height // 2 - 2
-        self.offset = max(self.selected - self.max_lines, 0)
+        self.offset = selected - validate_selected(self.file_names, self.selected)
+        #self.offset = 0
 
     def max_lines(self):
         return os.get_terminal_size() // 2 - 3
@@ -43,7 +47,7 @@ class TableWidget(Widget):
 
     def add_rows(self, table) -> RenderableType:
         for i in range(self.offset, len(self.rows)):
-            row = self.parse_row(self.rows[i].name)
+            row = self.file_names[i]
             if i == self.selected:
                 if self.rows[i].is_file():
                     table.add_row(Align(row, vertical="middle"), style="green")

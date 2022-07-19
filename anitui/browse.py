@@ -73,7 +73,7 @@ class AniTUI(App):
         self.view.layout.docks.clear()
         self.view.widgets.clear()
         await self.view.dock(Header("Anime TUI"), edge="top")
-        await self.view.dock(Progress(watch_list=self.watch_list), edge="right", size=40)
+        await self.view.dock(Progress(watch_list=self.watch_list), edge="right", size=Console().width // 3)
         await self.view.dock(Footer(), edge="bottom")
 
     async def change_dir(self, new_dir) -> None:
