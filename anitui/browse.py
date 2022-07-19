@@ -26,7 +26,6 @@ from .widgets import File, TableWidget, Header, Progress
 from .utils import get_config, query_watch_list, check_valid_select, Parser
 
 
-
 class AniTUI(App):
     filetypes = [".mp4", ".mkv"]
     selected = 0
@@ -40,7 +39,11 @@ class AniTUI(App):
         self.config = get_config()
         self.dir = self.config["anime_dir"]
         self.script_path = self.config["script_path"]
-        self.watch_list = query_watch_list(self.config['anilist_username']) if self.config['anilist_username'] else []
+        self.watch_list = (
+            query_watch_list(self.config["anilist_username"])
+            if self.config["anilist_username"]
+            else []
+        )
         self.offset = 0
 
     async def on_mount(self, event: events.Mount) -> None:
@@ -78,7 +81,13 @@ class AniTUI(App):
         self.calculate_offset()
         await self.clear_buttons()
         await self.view.dock(
-            TableWidget(rows=self.open_dir, file_names=self.file_names, style="white", selected=self.selected, offset=self.offset),
+            TableWidget(
+                rows=self.open_dir,
+                file_names=self.file_names,
+                style="white",
+                selected=self.selected,
+                offset=self.offset,
+            ),
             edge="left",
         )
 
@@ -86,7 +95,11 @@ class AniTUI(App):
         self.view.layout.docks.clear()
         self.view.widgets.clear()
         await self.view.dock(Header("Anime TUI"), edge="top")
-        await self.view.dock(Progress(watch_list=self.watch_list), edge="right", size=Console().width // 3)
+        await self.view.dock(
+            Progress(watch_list=self.watch_list),
+            edge="right",
+            size=Console().width // 3,
+        )
         await self.view.dock(Footer(), edge="bottom")
 
     async def change_dir(self, new_dir) -> None:
@@ -99,7 +112,7 @@ class AniTUI(App):
         return parser.parse(name)
 
     def open_anime(self, file) -> None:
-        if sys.platform == 'win32':
+        if sys.platform == "win32":
             os.startfile(file)
             if self.script_path:
                 os.startfile(self.script_path)
@@ -107,7 +120,6 @@ class AniTUI(App):
             subprocess.call(["vlc", file])
             if self.script_path:
                 subprocess.call([self.script_path])
-
 
     async def handle_click(self, file) -> None:
         print(file)
@@ -139,4 +151,4 @@ class AniTUI(App):
             await self.handle_click(self.open_dir[self.selected].name)
 
 
-#AniTUI.run(title="Anime TUI", log="textual.log")
+# AniTUI.run(title="Anime TUI", log="textual.log")

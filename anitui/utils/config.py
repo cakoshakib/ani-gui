@@ -5,8 +5,9 @@ import os
 default_config = {
     "anime_dir": f"{str(Path.home())}/Videos/anime",
     "script_path": "",
-    "anilist_username": ""
+    "anilist_username": "",
 }
+
 
 def create_config(config=default_config):
     config_dir = f"{str(Path.home())}/.config/anitui"
@@ -16,6 +17,7 @@ def create_config(config=default_config):
         with open(f"{config_dir}/config.json", "w") as f:
             json.dump(config, f, indent=4)
 
+
 def config_exists():
     config_dir = f"{str(Path.home())}/.config/anitui"
     if not Path(f"{config_dir}/config.json").is_file():
@@ -24,7 +26,7 @@ def config_exists():
 
 
 def get_config():
-    #create_config()
+    # create_config()
     with open(f"{str(Path.home())}/.config/anitui/config.json", "r") as configfile:
         config = json.loads(configfile.read())
     return config

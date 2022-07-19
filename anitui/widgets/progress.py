@@ -9,6 +9,7 @@ from textual.geometry import Offset
 from textual.widget import Reactive, Widget
 from rich.table import Table
 
+
 class Progress(Widget):
 
     style: Reactive[str] = Reactive("")
@@ -17,7 +18,6 @@ class Progress(Widget):
         super().__init__(name=name)
         self.watch_list = watch_list
 
-
     def construct_watch_list(self):
         data = self.watch_list
         table = Table.grid(padding=(1, 2), expand=True)
@@ -25,8 +25,8 @@ class Progress(Widget):
         table.add_column("Title")
         table.add_column("Episode", justify="right", ratio=1, style="red")
         for anime in data:
-            title = anime['media']['title']['english']
-            episode = anime['progress']
+            title = anime["media"]["title"]["english"]
+            episode = anime["progress"]
             table.add_row(str(title), str(episode))
         return table
 
@@ -35,7 +35,7 @@ class Progress(Widget):
 
         return Panel(
             table,
-            title='Watch List',
+            title="Watch List",
             border_style="green",
             style=self.style,
         )

@@ -1,9 +1,11 @@
 import requests
 
+
 def get_data(query, variables):
-    url = 'https://graphql.anilist.co'
+    url = "https://graphql.anilist.co"
     response = requests.post(url, json={"query": query, "variables": variables})
     return response.json()
+
 
 def query_watch_list(username):
     query = """
@@ -22,9 +24,9 @@ def query_watch_list(username):
     }
     """
     variables = {
-        'page': 1,
-        'perPage': 20,
-        'userName': username,
+        "page": 1,
+        "perPage": 20,
+        "userName": username,
     }
     res = get_data(query, variables)
-    return res['data']['Page']['mediaList']
+    return res["data"]["Page"]["mediaList"]
