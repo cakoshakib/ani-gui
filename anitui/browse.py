@@ -25,14 +25,10 @@ from textual.widget import Widget
 from .widgets import File, TableWidget, Header, Progress
 from .utils import get_config, query_watch_list
 
-console = Console()
-config = get_config()
 
 
 class AniTUI(App):
     filetypes = [".mp4", ".mkv"]
-    dir = config["anime_dir"]
-    script_path = config["script_path"]
     selected = 0
     open_dir = []
 
@@ -41,7 +37,10 @@ class AniTUI(App):
         await self.bind("q", "quit", "Quit")
         await self.bind("escape", "quit", "Quit")
         await self.bind("u", "back()", "Go back")
-        self.watch_list = query_watch_list(config['anilist_username']) if config['anilist_username'] else []
+        self.config = get_config()
+        self.dir = self.config["anime_dir"]
+        self.script_path = self.config["script_path"]
+        self.watch_list = query_watch_list(self.config['anilist_username']) if self.config['anilist_username'] else []
 
     async def on_mount(self, event: events.Mount) -> None:
         """Create and dock the widgets."""
