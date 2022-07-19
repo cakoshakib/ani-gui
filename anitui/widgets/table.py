@@ -16,6 +16,7 @@ class TableWidget(Widget):
         tall: bool = True,
         style: StyleType = "white on dark_green",
         clock: bool = True,
+        file_names: [str],
         rows: [os.DirEntry],
         selected: int,
         offset: int = 0,
@@ -25,12 +26,9 @@ class TableWidget(Widget):
         self.style = style
         self.clock = clock
         self.rows = rows
-        self.file_names = list(
-            map(lambda row: self.parse_row(row.name), rows)
-        )
+        self.file_names = file_names
         self.selected = selected
-        self.offset = selected - validate_selected(self.file_names, self.selected)
-        #self.offset = 0
+        self.offset = offset
 
     def max_lines(self):
         return os.get_terminal_size() // 2 - 3

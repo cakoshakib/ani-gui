@@ -26,10 +26,15 @@ def validate_selected(entries, selected):
             return selected
     return selected
 
+def check_valid_select(entries, selected, offset):
+    table_height, table_width = table_size()
 
+    total_height = 1
+    for i in range(offset, len(entries)):
+        total_height += entry_height(entries[i], table_height)
+        if total_height > table_height:
+            return False
+        if i == selected:
+            return True
+    return True
 
-
-
-
-
-    
