@@ -1,28 +1,17 @@
 import os
-from math import ceil
 import subprocess
 import sys
 
-from rich.markdown import Markdown
-from rich.console import Console, ConsoleOptions, RenderResult, RenderableType
-from rich.panel import Panel
-from rich.style import StyleType
-from rich.align import Align
-from rich.table import Table
-
+from rich.console import Console
 from textual import events
-from textual.app import App, DockLayout
+from textual.app import App
 from textual.widgets import (
     Footer,
     Placeholder,
-    ScrollView,
-    Button,
     ButtonPressed,
 )
-from textual.reactive import Reactive
-from textual.widget import Widget
 
-from .widgets import File, TableWidget, Header, Progress
+from .widgets import Files, Header, Progress
 from .utils import get_config, query_watch_list, check_valid_select, Parser
 
 
@@ -81,7 +70,7 @@ class AniTUI(App):
         self.calculate_offset()
         await self.clear_buttons()
         await self.view.dock(
-            TableWidget(
+            Files(
                 rows=self.open_dir,
                 file_names=self.file_names,
                 style="white",

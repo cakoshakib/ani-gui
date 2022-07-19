@@ -1,6 +1,4 @@
 import os
-from ..utils import Parser
-
 from rich.align import Align
 from rich.console import RenderableType, Console
 from rich.panel import Panel
@@ -9,7 +7,7 @@ from rich.table import Table
 from textual.widget import Widget
 
 
-class TableWidget(Widget):
+class Files(Widget):
     def __init__(
         self,
         *,
@@ -30,18 +28,11 @@ class TableWidget(Widget):
         self.selected = selected
         self.offset = offset
 
-    def max_lines(self):
-        return os.get_terminal_size() // 2 - 3
-
     def render(self) -> Panel:
         table = Table.grid(padding=(1, 1), expand=True)
         table.add_column("title", justify="left", ratio=1)
         table = self.add_rows(table)
         return table
-
-    def parse_row(self, name):
-        parser = Parser()
-        return parser.parse(name)
 
     def add_rows(self, table) -> RenderableType:
         for i in range(self.offset, len(self.rows)):
