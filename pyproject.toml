@@ -4,6 +4,9 @@ version = "0.1.1"
 description = "A TUI to browse Anime"
 authors = ["cakoshakib <cakoshakib@gmail.com>"]
 license = "MIT"
+readme = "README.md"
+repository = "https://github.com/cakoshakib/ani-tui"
+keywords = ["anime", "tui"]
 
 [tool.poetry.dependencies]
 python = "^3.10"

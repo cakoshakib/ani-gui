@@ -2,9 +2,9 @@
 
 TUI written in Python using [Textual](https://github.com/Textualize/textual) to navigate local Anime files. 
 
-# Getting Started
+## Getting Started
 
-## Install
+### Install
 
 To use ani-tui simply install the Python package:
 
@@ -20,7 +20,7 @@ py -m pip install anitui
 
 The TUI can then be run by simply typing `anitui` in the shell.
 
-## Development Setup
+### Development Setup
 
 Package management and deployment is done with [poetry](https://python-poetry.org/). To setup the repository for development:
 
@@ -42,10 +42,10 @@ poetry install
 poetry run anitui
 ```
 
-# Notes
+## Notes
 
 Scrolling is currently bugged on some terminal sizes. 
 
-# License
+## License
 MIT
 
