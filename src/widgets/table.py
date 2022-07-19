@@ -2,7 +2,7 @@ import os
 from utils import Parser
 
 from rich.align import Align
-from rich.console import RenderableType
+from rich.console import RenderableType, Console
 from rich.panel import Panel
 from rich.style import StyleType
 from rich.table import Table
@@ -25,7 +25,11 @@ class TableWidget(Widget):
         self.clock = clock
         self.rows = rows
         self.selected = selected
-        self.offset = max(self.selected - 21, 0)
+        self.max_lines = Console().height // 2 - 2
+        self.offset = max(self.selected - self.max_lines, 0)
+
+    def max_lines(self):
+        return os.get_terminal_size() // 2 - 3
 
     def render(self) -> Panel:
         table = Table.grid(padding=(1, 1), expand=True)

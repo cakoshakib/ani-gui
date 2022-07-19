@@ -60,6 +60,7 @@ class MyApp(App):
                     entry.is_file() and any(ext in entry.name for ext in self.filetypes)
                 ) or entry.is_dir():
                     open_dir.append(entry)
+        open_dir.sort(key=lambda file: file.name)
         return open_dir
 
     async def load_buttons(self) -> None:
