@@ -44,7 +44,7 @@ poetry run anitui
 
 ## Notes
 
-Scrolling is currently bugged on some terminal sizes. 
+Still in development, expect bugs! :)
 
 ## License
 MIT

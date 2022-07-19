@@ -13,25 +13,13 @@ def table_size():
     table_height = console.height - 2
     return table_height, table_width
 
-def validate_selected(entries, selected):
-    """ Returns True if selected is within table view """
-    table_height, table_width = table_size()
-    # Calculate how many lines each "entry" takes
-    total_height = 2
-    for i in range(len(entries)):
-        total_height += entry_height(entries[i], table_height)
-        if total_height > table_height:
-            return i
-        if i == selected:
-            return selected
-    return selected
-
 def check_valid_select(entries, selected, offset):
+    """ Returns True if selected is within table view """
     table_height, table_width = table_size()
 
     total_height = 1
     for i in range(offset, len(entries)):
-        total_height += entry_height(entries[i], table_height)
+        total_height += entry_height(entries[i], table_width)
         if total_height > table_height:
             return False
         if i == selected:
