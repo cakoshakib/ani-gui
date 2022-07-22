@@ -106,9 +106,9 @@ class AniTUI(App):
             if self.script_path:
                 os.startfile(self.script_path)
         else:
-            subprocess.call(["vlc", file])
+            subprocess.Popen(["vlc", file, ">>", "vlc.log"])
             if self.script_path:
-                subprocess.call([self.script_path])
+                subprocess.Popen([self.script_path, ">>", "script.log"])
 
     async def handle_click(self, file) -> None:
         print(file)
