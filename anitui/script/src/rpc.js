@@ -4,7 +4,6 @@ const status = require("./vlc");
 const titleParser = require("./utils/title_parser");
 const ani = require("./api/anilist");
 const logger = require("./utils/logger");
-const icons = require("./utils/icon.js");
 
 const rpc = new DiscordRPC.Client({
   transport: "ipc",
@@ -44,14 +43,12 @@ const setStatus = async () => {
     updateAni = true;
   }
 
-  const randPick = Math.floor(Math.random() * icons.length);
 
   // Discord Rich Presence Activity
   const activity = {
     details: parsedTitle.title,
     state: stateCapitalized,
     instance: true,
-    //largeImageKey: icons[randPick],
     largeImageKey: "lolweeb",
     largeImageText: "Weeb Trash",
   };
