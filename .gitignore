@@ -1,4 +1,6 @@
 __pycache__
 textual.log
 dist
+node_modules
+.env
 
