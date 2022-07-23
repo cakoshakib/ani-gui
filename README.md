@@ -2,6 +2,10 @@
 
 TUI written in Python using [Textual](https://github.com/Textualize/textual) to navigate local Anime files. 
 
+## Showcase
+
+![GIF of AniTUI](./fluff/anitui-showcase.gif)
+
 ## Getting Started
 
 ### Install
