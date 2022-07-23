@@ -27,7 +27,7 @@ class AniTUI(App):
         await self.bind("u", "back()", "Go back")
         self.config = get_config()
         self.dir = self.config["anime_dir"]
-        self.script_path = self.config["script_path"]
+        self.run_script = self.config["script"]
         self.watch_list = (
             query_watch_list(self.config["anilist_username"])
             if self.config["anilist_username"]
@@ -103,12 +103,18 @@ class AniTUI(App):
     def open_anime(self, file) -> None:
         if sys.platform == "win32":
             os.startfile(file)
-            if self.script_path:
-                os.startfile(self.script_path)
+            if self.run_script:
+                os.startfile(["{os.path.dirname(os.path.realpath(__file__))}/script/run.bat"])
         else:
-            subprocess.Popen(["vlc", file, ">>", "vlc.log"])
-            if self.script_path:
-                subprocess.Popen([self.script_path, ">>", "script.log"])
+            subprocess.Popen(
+                ["vlc", file], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
+            if self.run_script:
+                subprocess.Popen(
+                    [f"{os.path.dirname(os.path.realpath(__file__))}/script/run.sh"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
 
     async def handle_click(self, file) -> None:
         print(file)
