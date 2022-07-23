@@ -104,10 +104,14 @@ class AniTUI(App):
         if sys.platform == "win32":
             os.startfile(file)
             if self.run_script:
-                os.startfile(["{os.path.dirname(os.path.realpath(__file__))}/script/run.bat"])
+                os.startfile(
+                    ["{os.path.dirname(os.path.realpath(__file__))}/script/run.bat"]
+                )
         else:
             subprocess.Popen(
-                ["vlc", file], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+                ["xdg-open", file],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
             )
             if self.run_script:
                 subprocess.Popen(
