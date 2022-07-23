@@ -8,6 +8,10 @@ TUI written in Python using [Textual](https://github.com/Textualize/textual) to 
 
 ## Getting Started
 
+### Prerequisites
+
+- Python 3.9+
+
 ### Install
 
 To use ani-tui simply install the Python package:
