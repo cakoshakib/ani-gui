@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "anitui"
-version = "0.1.4"
+version = "0.1.6"
 description = "A TUI to browse Anime"
 authors = ["cakoshakib <cakoshakib@gmail.com>"]
 license = "MIT"
