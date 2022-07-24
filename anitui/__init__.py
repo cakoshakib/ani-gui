@@ -21,4 +21,4 @@ def main():
             }
         )
 
-    AniTUI.run(title="Anime TUI", log="textual.log")
+    AniTUI.run(title="Anime TUI")
