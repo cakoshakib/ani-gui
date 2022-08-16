@@ -105,7 +105,7 @@ class AniTUI(App):
             os.startfile(file)
             if self.run_script:
                 os.startfile(
-                    "{os.path.dirname(os.path.realpath(__file__))}/script/run.bat"
+                    f"{os.path.dirname(os.path.realpath(__file__))}/script/run.bat"
                 )
         else:
             subprocess.Popen(
